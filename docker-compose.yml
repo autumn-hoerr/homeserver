@@ -20,6 +20,8 @@ services:
                 volumes:
                         - ${USERDIR}/docker/plexms:/config
                         - ${USERDIR}/Downloads/plex_tmp:/transcode
+                        - ${USERDIR}/docker/plexms/movies:/data/movies
+                        - ${USERDIR}/docker/plexms/tv:/data/tv
                         - /media/media:/media
                         - ${USERDIR}/docker/shared:/shared
                 ports:
@@ -35,7 +37,55 @@ services:
                 environment:
                         - TZ=${TZ}
                         - HOSTNAME="Nut Server Plex"
-                        - PLEX_CLAIM="claim-bY3QbVsM4VSRw8psdNTR"
+                        - PLEX_CLAIM="claim-rW515H7xfh7etBnXQj29"
                         - PLEX_UID=${PUID}
                         - PLEX_GID=${PGID}
                         - ADVERTISE_IP="http://192.168.1.230:32400/"
+                        - VERSION=docker
+        sabnzbd:
+                image: "linuxserver/sabnzbd"
+                container_name: "sabnzbd"
+                volumes:
+                        - ${USERDIR}/docker/sabnzbd:/config
+                        - ${USERDIR}/Downloads/completed:/downloads
+                        - ${USERDIR}/Downloads/incomplete:/incomplete-downloads
+                        - ${USERDIR}/docker/shared:/shared
+                ports:
+                        - "8080:8080"
+                restart: always
+                environment:
+                        - PUID=${PUID}
+                        - PGID=${PGID}
+                        - TZ=${TZ}
+        radarr:
+                image: "linuxserver/radarr"
+                container_name: "radarr"
+                volumes:
+                        - ${USERDIR}/docker/radarr:/config
+                        - ${USERDIR}/Downloads/completed:/downloads
+                        - ${USERDIR}/media/movies:/movies
+                        - "/etc/localtime:/etc/localtime:ro"
+                        - ${USERDIR}/docker/shared:/shared
+                ports:
+                        - "7878:7878"
+                restart: always
+                environment:
+                        - PUID=${PUID}
+                        - PGID=${PGID}
+                        - TZ=${TZ}
+        sonarr:
+                image: "linuxserver/sonarr"
+                container_name: "sonarr"
+                volumes:
+                        - ${USERDIR}/docker/sonarr:/config
+                        - ${USERDIR}/Downloads/completed:/downloads
+                        - ${USERDIR}/media/tvshows:/tv
+                        - "/etc/localtime:/etc/localtime:ro"
+                        - ${USERDIR}/docker/shared:/shared
+                ports:
+                        - "8989:8989"
+                restart: always
+                environment:
+                        - PUID=${PUID}
+                        - PGID=${PGID}
+                        - TZ=${TZ}
