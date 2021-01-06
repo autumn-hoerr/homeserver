@@ -89,3 +89,17 @@ services:
                         - PUID=${PUID}
                         - PGID=${PGID}
                         - TZ=${TZ}
+        hydra:
+                image: "linuxserver/hydra"
+                container_name: "hydra"
+                volumes:
+                        - ${USERDIR}/docker/hydra:/config
+                        - ${USERDIR}/Downloads:/downloads
+                        - ${USERDIR}/docker/shared:/shared
+                ports:
+                        - "5075:5075"
+                restart: always
+                environment:
+                        - PUID=${PUID}
+                        - PGID=${PGID}
+                        - TZ=${TZ}
