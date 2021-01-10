@@ -20,8 +20,8 @@ services:
                 volumes:
                         - ${USERDIR}/docker/plexms:/config
                         - ${USERDIR}/Downloads/plex_tmp:/transcode
-                        - ${USERDIR}/docker/plexms/movies:/data/movies
-                        - ${USERDIR}/docker/plexms/tv:/data/tv
+                        - /media/plexms-library/movies:/data/movies
+                        - /media/plexms-library/tv:/data/tv
                         - /media/media:/media
                         - ${USERDIR}/docker/shared:/shared
                 ports:
@@ -50,6 +50,7 @@ services:
                         - ${USERDIR}/Downloads/completed:/downloads
                         - ${USERDIR}/Downloads/incomplete:/incomplete-downloads
                         - ${USERDIR}/docker/shared:/shared
+                        - /media/plexms-library:/plexms-library
                 ports:
                         - "8080:8080"
                 restart: always
@@ -63,7 +64,7 @@ services:
                 volumes:
                         - ${USERDIR}/docker/radarr:/config
                         - ${USERDIR}/Downloads/completed:/downloads
-                        - ${USERDIR}/media/movies:/movies
+                        - /media/plexms-library/movies:/plexms-library/movies
                         - "/etc/localtime:/etc/localtime:ro"
                         - ${USERDIR}/docker/shared:/shared
                 ports:
