@@ -1,7 +1,7 @@
 version: "3.6"
 services:
         portainer:
-                image: portainer/portainer
+                image: portainer/portainer-ce:latest
                 container_name: portainer
                 restart: always
                 command: -H unix:///var/run/docker.sock
@@ -14,11 +14,9 @@ services:
                 environment:
                         - TZ=${TZ}
         plexms:
-                container_name: plexms
-                restart: always
-                image: plexinc/pms-docker
-                devices:
-                        - dev/dri:/dev/dri
+                container_name: plex
+                restart: unless-stopped
+                image: lscr.io/linuxserver/plex:latest
                 volumes:
                         - ${USERDIR}/docker/plexms:/config
                         - ${USERDIR}/Downloads/plex_tmp:/transcode
@@ -27,25 +25,25 @@ services:
                         - /media/media:/media
                         - ${USERDIR}/docker/shared:/shared
                 ports:
-                        - "32400:32400/tcp"
-                        - "3005:3005/tcp"
-                        - "8324:8324/tcp"
-                        - "32469:32469/tcp"
-                        - "1900:1900/udp"
-                        - "32410:32410/udp"
-                        - "32412:32412/udp"
-                        - "32413:32413/udp"
-                        - "32414:32414/udp"
+                        - 32400:32400
+                        - 1900:1900/udp
+                        - 5353:5353/udp
+                        - 8324:8324
+                        - 32410:32410/udp
+                        - 32412:32412/udp
+                        - 32413:32413/udp
+                        - 32414:32414/udp
+                        - 32469:32469
                 environment:
                         - TZ=${TZ}
                         - HOSTNAME="Nut Server Plex"
                         - PLEX_CLAIM="claim-rW515H7xfh7etBnXQj29"
-                        - PLEX_UID=${PUID}
-                        - PLEX_GID=${PGID}
+                        - PUID=${PUID}
+                        - PGID=${PGID}
                         - ADVERTISE_IP="http://192.168.1.230:32400/"
                         - VERSION=docker
         sabnzbd:
-                image: "linuxserver/sabnzbd"
+                image: "linuxserver/sabnzbd:latest"
                 container_name: "sabnzbd"
                 volumes:
                         - ${USERDIR}/docker/sabnzbd:/config
@@ -55,13 +53,13 @@ services:
                         - /media/plexms-library:/plexms-library
                 ports:
                         - "8080:8080"
-                restart: always
+                restart: unless-stopped
                 environment:
                         - PUID=${PUID}
                         - PGID=${PGID}
                         - TZ=${TZ}
         radarr:
-                image: "linuxserver/radarr"
+                image: "linuxserver/radarr:latest"
                 container_name: "radarr"
                 volumes:
                         - ${USERDIR}/docker/radarr:/config
@@ -71,13 +69,13 @@ services:
                         - ${USERDIR}/docker/shared:/shared
                 ports:
                         - "7878:7878"
-                restart: always
+                restart: unless-stopped
                 environment:
                         - PUID=${PUID}
                         - PGID=${PGID}
                         - TZ=${TZ}
         sonarr:
-                image: "linuxserver/sonarr"
+                image: "linuxserver/sonarr:latest"
                 container_name: "sonarr"
                 volumes:
                         - ${USERDIR}/docker/sonarr:/config
@@ -87,13 +85,13 @@ services:
                         - ${USERDIR}/docker/shared:/shared
                 ports:
                         - "8989:8989"
-                restart: always
+                restart: unless-stopped
                 environment:
                         - PUID=${PUID}
                         - PGID=${PGID}
                         - TZ=${TZ}
         hydra:
-                image: "linuxserver/hydra"
+                image: "linuxserver/hydra:latest"
                 container_name: "hydra"
                 volumes:
                         - ${USERDIR}/docker/hydra:/config
@@ -101,17 +99,17 @@ services:
                         - ${USERDIR}/docker/shared:/shared
                 ports:
                         - "5075:5075"
-                restart: always
+                restart: unless-stopped
                 environment:
                         - PUID=${PUID}
                         - PGID=${PGID}
                         - TZ=${TZ}
         duplicati:
-                image: "linuxserver/duplicati"
+                image: "linuxserver/duplicati:latest"
                 container_name: "duplicati"
                 ports:
                         - "8200:8200"
-                restart: always
+                restart: unless-stopped
                 environment:
                         - PUID=${PUID}
                         - PGID=${PGID}
@@ -120,17 +118,4 @@ services:
                         - ${USERDIR}/docker/duplicati:/config
                         - ${USERDIR}/docker/duplicati:/backups
                         - /media:/source
-        homeassistant:
-                image: "homeassistant/home-assistant"
-                container_name: "homeassistant"
-                ports:
-                        - "9002:80"
-                network_mode: host
-                privileged: true
-                environment:
-                        - PUID=${PUID}
-                        - PGID=${PGID}
-                        - TZ=${TZ}
-                volumes:
-                        - ${USERDIR}/docker/homeassistant:/config
-                        - /etc/localtime:/etc/localtime:ro
+        
