@@ -28,7 +28,7 @@ services:
                 restart: always
                 image: plexinc/pms-docker:public
                 devices:
-                        - dev/dri:/dev/dri
+                        - /dev/dri:/dev/dri
                 volumes:
                         - ${USERDIR}/docker/plexms:/config
                         - ${USERDIR}/Downloads/plex_tmp:/transcode
