@@ -130,4 +130,21 @@ services:
                         - ${USERDIR}/docker/duplicati:/config
                         - ${USERDIR}/docker/duplicati:/backups
                         - /media:/source
+        minecraft:
+                image: "itzg/minecraft-bedrock-server"
+                container_name: "minecraft"
+                ports:
+                        - "19132:19132/udp"
+                restart: unless-stopped
+                environment:
+                        - TZ=${TZ}
+                        - VERSION=LATEST
+                        - EULA=TRUE
+                        - VERSION=1.16.5
+                        - SERVER_NAME=NutMine
+                        - GAMEMODE=survival
+                        - DIFFICULTY=easy
+
+                volumes:
+                        - ${USERDIR}/docker/minecraft:/data
         
