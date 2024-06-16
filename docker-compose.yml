@@ -34,6 +34,8 @@ services:
                         - /media/plexms-library/tv:/data/tv
                         - /media/media:/media
                         - ${USERDIR}/docker/shared:/shared
+                devices:
+                        - /dev/dri:/dev/dri
                 ports:
                         - 32400:32400
                         - 1900:1900/udp
