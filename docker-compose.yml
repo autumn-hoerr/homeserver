@@ -24,9 +24,11 @@ services:
                 environment:
                         - TZ=${TZ}
         plexms:
-                container_name: plex
-                restart: unless-stopped
-                image: lscr.io/linuxserver/plex:latest
+                container_name: plexms
+                restart: always
+                image: plexinc/pms-docker:public
+                devices:
+                        - dev/dri:/dev/dri
                 volumes:
                         - ${USERDIR}/docker/plexms:/config
                         - ${USERDIR}/Downloads/plex_tmp:/transcode
@@ -34,24 +36,22 @@ services:
                         - /media/plexms-library/tv:/data/tv
                         - /media/media:/media
                         - ${USERDIR}/docker/shared:/shared
-                devices:
-                        - /dev/dri:/dev/dri
                 ports:
-                        - 32400:32400
-                        - 1900:1900/udp
-                        - 5353:5353/udp
-                        - 8324:8324
-                        - 32410:32410/udp
-                        - 32412:32412/udp
-                        - 32413:32413/udp
-                        - 32414:32414/udp
-                        - 32469:32469
+                        - "32400:32400/tcp"
+                        - "3005:3005/tcp"
+                        - "8324:8324/tcp"
+                        - "32469:32469/tcp"
+                        - "1900:1900/udp"
+                        - "32410:32410/udp"
+                        - "32412:32412/udp"
+                        - "32413:32413/udp"
+                        - "32414:32414/udp"
                 environment:
                         - TZ=${TZ}
                         - HOSTNAME="Nut Server Plex"
                         - PLEX_CLAIM="claim-rW515H7xfh7etBnXQj29"
-                        - PUID=${PUID}
-                        - PGID=${PGID}
+                        - PLEX_UID=${PUID}
+                        - PLEX_GID=${PGID}
                         - ADVERTISE_IP="http://192.168.1.230:32400/"
                         - VERSION=docker
         sabnzbd:
