@@ -138,9 +138,7 @@ services:
                 restart: unless-stopped
                 environment:
                         - TZ=${TZ}
-                        - VERSION=LATEST
                         - EULA=TRUE
-                        - VERSION=1.16.5
                         - SERVER_NAME=NutMine
                         - GAMEMODE=survival
                         - DIFFICULTY=easy
@@ -156,7 +154,6 @@ services:
                 volumes:
                 - ${USERDIR}/docker/ddns/data:/updater/data
                 environment:
-                - CONFIG=
                 - PERIOD=5m
                 - UPDATE_COOLDOWN_PERIOD=5m
                 - PUBLICIP_FETCHERS=all
