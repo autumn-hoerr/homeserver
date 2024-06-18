@@ -136,16 +136,31 @@ services:
                 ports:
                         - "19132:19132/udp"
                 restart: unless-stopped
+                expose:
+                        - 2222
                 environment:
                         - TZ=${TZ}
                         - EULA=TRUE
+                        - ENABLE_SSH=TRUE
                         - SERVER_NAME=NutMine
                         - GAMEMODE=survival
                         - DIFFICULTY=easy
                         - ALLOW_CHEATS=true
+                        - LEVEL_NAME=world1
 
                 volumes:
                         - ${USERDIR}/docker/minecraft:/data
+        mc-backups:
+                image: kaiede/minecraft-bedrock-backup
+                container_name: "mc-backups"
+                restart: unless-stopped
+                depends_on:
+                        - "minecraft"
+                environment:
+                        - TZ=${TZ}
+                volumes:
+                        - ${USERDIR}/docker/mcbackups:/data
+                        - ${USERDIR}/docker/minecraft:/minecraft
         ddns-updater:
                 image: qmcgaw/ddns-updater
                 container_name: ddns-updater
