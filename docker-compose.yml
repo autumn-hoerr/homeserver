@@ -142,7 +142,7 @@ services:
                 volumes:
                         - ${USERDIR}/docker/readarr:/config
                         - ${USERDIR}/docker/readarr/books:/books
-                        - ${USERDIR}/Downloads:/downloads
+                        - ${USERDIR}/Downloads/completed:/downloads
                 ports:
                         - 8787:8787
                 restart: unless-stopped
