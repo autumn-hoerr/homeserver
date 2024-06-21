@@ -58,6 +58,7 @@ services:
                 image: "linuxserver/sabnzbd:latest"
                 container_name: "sabnzbd"
                 volumes:
+                        - /media/books:/books
                         - ${USERDIR}/docker/sabnzbd:/config
                         - ${USERDIR}/Downloads/completed:/downloads
                         - ${USERDIR}/Downloads/incomplete:/incomplete-downloads
@@ -129,7 +130,22 @@ services:
                 volumes:
                         - ${USERDIR}/docker/duplicati:/config
                         - ${USERDIR}/docker/duplicati:/backups
+                        - ${USERDIR}/docker/mcbackups:/minecraft
                         - /media:/source
+        readarr:
+                image: "linuxserver/readarr:develop"
+                container_name: "readarr"
+                environment:
+                        - PUID=${PUID}
+                        - PGID=${PGID}
+                        - TZ=${TZ}
+                volumes:
+                        - ${USERDIR}/docker/readarr:/config
+                        - ${USERDIR}/docker/readarr/books:/books
+                        - ${USERDIR}/Downloads:/downloads
+                ports:
+                        - 8787:8787
+                restart: unless-stopped
         minecraft:
                 image: "itzg/minecraft-bedrock-server:latest"
                 container_name: "minecraft"
